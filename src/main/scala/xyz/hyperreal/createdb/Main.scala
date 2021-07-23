@@ -2,6 +2,7 @@ package xyz.hyperreal.createdb
 
 import xyz.hyperreal.char_reader.CharReader
 import scopt.OParser
+import xyz.hyperreal.datetime.Datetime
 import xyz.hyperreal.importer.Importer.importFromReader
 import xyz.hyperreal.importer.{Column, Table}
 
@@ -68,7 +69,9 @@ object Main extends App {
       val rows =
         data map (r =>
           r map {
+            case d: Datetime => s"'$d'"
             case s: String => s"'${s.replace("'", "''")}'"
+            case null => "NULL"
             case v         => v
           } mkString ("  (", ", ", ")")) mkString ",\n"
 
