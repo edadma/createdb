@@ -40,7 +40,10 @@ object Main extends App {
               typ match {
                 case "integer" => "INTEGER"
                 case "text" => "TEXT"
-                case "decimal" => "DOUBLE PRECISION"
+                case "float" => "DOUBLE PRECISION"
+                case "decimal" => "NUMERIC(15, 2)"
+                case "uuid" => "UUID"
+                case "timestamp" => "TIMESTAMP WITHOUT TIME ZONE"
               }
 
             s"""  "$name" $ctyp${if (args == List("pk")) " PRIMARY KEY" else ""}"""
