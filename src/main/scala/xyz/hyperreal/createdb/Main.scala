@@ -4,7 +4,7 @@ import xyz.hyperreal.char_reader.CharReader
 import scopt.OParser
 import xyz.hyperreal.datetime.Datetime
 import xyz.hyperreal.importer.Importer.importFromReader
-import xyz.hyperreal.importer.{Column, Table}
+import xyz.hyperreal.importer.{Column, Enum, Import, Table}
 
 import java.io.File
 
@@ -31,7 +31,11 @@ object Main extends App {
   }
 
   def generate(tab: String): Unit = {
-    val tables = importFromReader(CharReader.fromFile(tab), doubleSpaces = true)
+    val Import(enums, tables) = importFromReader(CharReader.fromFile(tab), doubleSpaces = true)
+    val enumset = enums map (_.name) toSet
+
+    for (Enum(name, labels) <- enums)
+      println(s"""CREATE TYPE "$name" AS ENUM (${labels map (l => s"'$l'") mkString ", "});""")
 
     for (Table(name, header, _) <- tables) {
       val columns =
@@ -45,6 +49,7 @@ object Main extends App {
                 case "decimal" => "NUMERIC(15, 2)"
                 case "uuid" => "UUID"
                 case "timestamp" => "TIMESTAMP WITHOUT TIME ZONE"
+                case _ if enumset contains typ => typ
               }
 
             s"""  "$name" $ctyp${if (args == List("pk")) " PRIMARY KEY" else ""}"""
