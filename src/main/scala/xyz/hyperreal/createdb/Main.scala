@@ -44,6 +44,7 @@ object Main extends App {
             val ctyp =
               typ match {
                 case "integer" => "INTEGER"
+                case "bigint" => "BIGINT"
                 case "text" => "TEXT"
                 case "float" => "DOUBLE PRECISION"
                 case "decimal" => "NUMERIC(15, 2)"
