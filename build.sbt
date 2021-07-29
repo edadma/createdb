@@ -44,7 +44,7 @@ libraryDependencies ++= Seq(
 )
 
 libraryDependencies ++= Seq(
-  "xyz.hyperreal" %%% "importer" % "0.1.4"
+  "xyz.hyperreal" %%% "importer" % "0.1.5"
 )
 
 publishMavenStyle := true
